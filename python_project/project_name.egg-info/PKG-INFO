@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: project-name
+Version: 0.0.1
+Summary: A small example
+Author-email: Elizaveta <dolgintsevaliza00@gmail.com>
+Project-URL: Homepage, https://github.com/TiMeLeSsWorld00
+Project-URL: Bug Tracker, https://github.com/TiMeLeSsWorld00/mypython-2022
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+This is readme file
+
+Результат - самый жаркий месяц и город из заданного файла и года
