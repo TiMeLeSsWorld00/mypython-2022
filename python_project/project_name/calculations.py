@@ -1,18 +1,28 @@
 import argparse
 
 import pandas as pd
+from pyspark.sql import SparkSession
+import pyspark.sql.functions as F
 
+spark = SparkSession \
+    .builder \
+    .master("local[*]") \
+    .appName("PySpark") \
+    .getOrCreate()
 
 def calculations(input_path, input_year):
+    
     df = pd.read_csv(input_path, parse_dates=['dt'])
-    df['year'] = df['dt'].apply(lambda x: x.year)
-    df['month'] = df['dt'].apply(lambda x: x.month)
-    warmth = (
-        df[df.year == int(input_year)]
-        .groupby(['City', 'month'], as_index=False)['AverageTemperature']
-        .mean()
+    sdf = spark.createDataFrame(df)
+    sdf = (sdf
+       .withColumn('year', F.year('dt'))
+       .withColumn('month', F.month('dt'))
+       .filter(F.col('year') == int(input_year))
+       .groupBy(['City', 'month']).agg(F.mean(F.col('AverageTemperature')).alias('AverageTemperature'))
+       .orderBy(F.col('AverageTemperature').desc())
     )
-    warmth = warmth.sort_values(by=['AverageTemperature'], ascending=False)
+    warmth = sdf.toPandas()
+
     return warmth['month'].values[0], warmth['City'].values[0]
 
 
